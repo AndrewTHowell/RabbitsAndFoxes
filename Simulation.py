@@ -2,6 +2,9 @@ import random
 
 
 class Animal:
+    ID: int
+    ID = 1
+
     __health: float
     maxHealth = 100.
     hungerDamage = 5.
@@ -11,13 +14,24 @@ class Animal:
     foodLevelExpelledPerDay = 5.
     hungerLevel = maxFoodLevel / 5
 
-    actions = {"locateFood"}
+    __actions: list
+    actions = ["locateFood"]
 
     def __init__(self):
+        self.ID = Animal.ID
+        Animal.ID += 1
+
         self.__health = Animal.maxHealth
         self.__foodLevel = Animal.maxFoodLevel
 
         self.__actions = Animal.actions
+
+    def report(self) -> None:
+        print(f"\nAnimal {self.ID}:")
+        print(f"Alive: {self.alive}")
+        print(f"Health: {self.health}")
+        print(f"Hungry: {self.hungry}")
+        print(f"Food Level: {self.foodLevel}")
 
     # Health Methods
     @property
@@ -57,12 +71,8 @@ class Animal:
     def act(self) -> None:
         action = random.choice(self.actions)
 
-        if action == "locateFood":
-            # self.moveTowardsFood()
-            pass
-
     # Every time step:
-    def step(self):
+    def simulateDay(self):
         if self.alive:
             self.hunger(Animal.foodLevelExpelledPerDay)
 
@@ -71,3 +81,16 @@ class Animal:
 
         if self.alive:
             self.act()
+
+
+if __name__ == "__main__":
+    numAnimals = 10
+
+    animals = []
+    for _ in range(numAnimals):
+        animals.append(Animal())
+
+    # Run the simulation
+    for animal in animals:
+        animal.simulateDay()
+        animal.report()
