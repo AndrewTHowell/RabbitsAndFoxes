@@ -19,6 +19,33 @@ class TestInit(TestAnimal):
         for action in self.animal.actions:
             self.assertEqual(True, callable(getattr(self.animal, action, None)))
 
+    def test_initial_gender(self):
+        self.assertIn(self.animal.gender, ["male", "female"])
+
+    def test_settable_gender(self):
+        maleAnimal = Animal(male=True)
+        femaleAnimal = Animal(male=False)
+        self.assertEqual("male", maleAnimal.gender)
+        self.assertEqual("female", femaleAnimal.gender)
+
+
+class TestGender(TestAnimal):
+    def test_compatible_mates(self):
+        maleAnimal = Animal(male=True)
+        femaleAnimal = Animal(male=False)
+        self.assertEqual(True, maleAnimal.sexuallyCompatible(femaleAnimal))
+
+    def test_incompatible_mates(self):
+        maleAnimal1 = Animal(male=True)
+        maleAnimal2 = Animal(male=True)
+        femaleAnimal1 = Animal(male=False)
+        femaleAnimal2 = Animal(male=False)
+        self.assertEqual(False, maleAnimal1.sexuallyCompatible(maleAnimal2))
+        self.assertEqual(False, femaleAnimal1.sexuallyCompatible(femaleAnimal2))
+
+    def test_self_incompatibility(self):
+        self.assertEqual(False, self.animal.sexuallyCompatible(self.animal))
+
 
 class TestHealth(TestAnimal):
     def test_damage(self):

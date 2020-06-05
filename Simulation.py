@@ -5,6 +5,8 @@ class Animal:
     ID: int
     ID = 1
 
+    __gender: str
+
     __health: float
     maxHealth = 100.
     hungerDamage = 5.
@@ -15,11 +17,18 @@ class Animal:
     hungerLevel = maxFoodLevel / 5
 
     __actions: list
-    potentialActions = ["seekFood", "wander", "avoid"]
+    potentialActions = ["seekFood", "seekMate", "wander", "flee"]
 
-    def __init__(self):
+    def __init__(self, male=None):
         self.ID = Animal.ID
         Animal.ID += 1
+
+        if male is None:
+            self.__gender = random.choice(["male", "female"])
+        elif male:
+            self.__gender = "male"
+        else:
+            self.__gender = "female"
 
         self.__health = Animal.maxHealth
         self.__foodLevel = Animal.maxFoodLevel
@@ -33,6 +42,14 @@ class Animal:
         print(f"Health: {self.health}")
         print(f"Hungry: {self.hungry}")
         print(f"Food Level: {self.foodLevel}")
+
+    # Gender Methods
+    @property
+    def gender(self):
+        return self.__gender
+
+    def sexuallyCompatible(self, potentialMate):
+        return potentialMate.gender != self.__gender and self != potentialMate
 
     # Health Methods
     @property
@@ -76,13 +93,32 @@ class Animal:
     def act(self) -> None:
         actionFunction = random.choice(self.__actions)
 
+        # Call the actionFunction
         eval("self." + actionFunction + "()")
+
+    def seek(self, targetLocation):
+        print(f"Seeking {targetLocation}")
 
     def seekFood(self):
         print("Seeking Food")
 
+        # Choose nearest food source
+        nearestFoodSource = None
+        self.seek(nearestFoodSource)
+
+    def seekMate(self):
+        print("Seeking Mate")
+
+        # Choose nearest suitable mate
+        nearestSuitableMate = None
+        self.seek(nearestSuitableMate)
+
     def wander(self):
         print("Wandering")
+
+        # Choose random position on the board
+        randomLocation = None
+        self.seek(randomLocation)
 
     # Every time step:
     def simulateDay(self):
