@@ -15,6 +15,10 @@ class TestInit(TestAnimal):
     def test_initial_foodLevel(self):
         self.assertEqual(Animal.maxFoodLevel, self.animal.foodLevel)
 
+    def test_all_actions_are_callable(self):
+        for action in self.animal.actions:
+            self.assertEqual(True, callable(getattr(self.animal, action, None)))
+
 
 class TestHealth(TestAnimal):
     def test_damage(self):

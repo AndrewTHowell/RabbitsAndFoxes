@@ -15,7 +15,7 @@ class Animal:
     hungerLevel = maxFoodLevel / 5
 
     __actions: list
-    actions = ["seekFood", "wander", "avoid"]
+    potentialActions = ["seekFood", "wander", "avoid"]
 
     def __init__(self):
         self.ID = Animal.ID
@@ -25,8 +25,7 @@ class Animal:
         self.__foodLevel = Animal.maxFoodLevel
 
         # Inherit all actions from Animal class for which this animal has callable methods for
-        self.__actions = [action for action in Animal.actions if callable(getattr(self, action, None))]
-        print(self.__actions)
+        self.__actions = [action for action in Animal.potentialActions if callable(getattr(self, action, None))]
 
     def report(self) -> None:
         print(f"\nAnimal {self.ID}:")
@@ -70,6 +69,10 @@ class Animal:
         self.__foodLevel = min(Animal.maxFoodLevel, self.__foodLevel + amount)
 
     # Action Methods
+    @property
+    def actions(self) -> list:
+        return self.__actions
+
     def act(self) -> None:
         actionFunction = random.choice(self.__actions)
 
