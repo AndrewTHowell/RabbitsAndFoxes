@@ -74,12 +74,9 @@ class TestFoodLevel(TestAnimal):
         self.assertEqual(self.animal.foodLevel, 0)
 
     def test_eat(self):
-        print(self.animal.foodLevel)
         self.animal.hunger(5)
         initialFoodLevel = self.animal.foodLevel
-        print(self.animal.foodLevel)
         self.animal.eat(5)
-        print(self.animal.foodLevel)
         self.assertEqual(self.animal.foodLevel, initialFoodLevel + 5)
 
     def test_multiple_eat(self):

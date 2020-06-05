@@ -15,7 +15,7 @@ class Animal:
     hungerLevel = maxFoodLevel / 5
 
     __actions: list
-    actions = ["locateFood"]
+    actions = ["seekFood", "wander", "avoid"]
 
     def __init__(self):
         self.ID = Animal.ID
@@ -24,7 +24,9 @@ class Animal:
         self.__health = Animal.maxHealth
         self.__foodLevel = Animal.maxFoodLevel
 
-        self.__actions = Animal.actions
+        # Inherit all actions from Animal class for which this animal has callable methods for
+        self.__actions = [action for action in Animal.actions if callable(getattr(self, action, None))]
+        print(self.__actions)
 
     def report(self) -> None:
         print(f"\nAnimal {self.ID}:")
@@ -69,7 +71,15 @@ class Animal:
 
     # Action Methods
     def act(self) -> None:
-        action = random.choice(self.actions)
+        actionFunction = random.choice(self.__actions)
+
+        eval("self." + actionFunction + "()")
+
+    def seekFood(self):
+        print("Seeking Food")
+
+    def wander(self):
+        print("Wandering")
 
     # Every time step:
     def simulateDay(self):
@@ -84,7 +94,7 @@ class Animal:
 
 
 if __name__ == "__main__":
-    numAnimals = 10
+    numAnimals = 1
 
     animals = []
     for _ in range(numAnimals):
