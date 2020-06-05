@@ -27,8 +27,10 @@ class Animal:
             self.__gender = random.choice(["male", "female"])
         elif male:
             self.__gender = "male"
-        else:
+        elif not male:
             self.__gender = "female"
+        else:
+            self.__gender = random.choice(["male", "female"])
 
         self.__health = Animal.maxHealth
         self.__foodLevel = Animal.maxFoodLevel
@@ -99,24 +101,26 @@ class Animal:
     def seek(self, targetLocation):
         print(f"Seeking {targetLocation}")
 
+        # TODO - Add seek functionality
+
     def seekFood(self):
         print("Seeking Food")
 
-        # Choose nearest food source
+        # TODO - Choose nearest food source
         nearestFoodSource = None
         self.seek(nearestFoodSource)
 
     def seekMate(self):
         print("Seeking Mate")
 
-        # Choose nearest suitable mate
+        # TODO - Choose nearest suitable mate
         nearestSuitableMate = None
         self.seek(nearestSuitableMate)
 
     def wander(self):
         print("Wandering")
 
-        # Choose random position on the board
+        # TODO - Choose random position on the play space
         randomLocation = None
         self.seek(randomLocation)
 
