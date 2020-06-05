@@ -1,11 +1,17 @@
 import random
-
+from scipy.stats import norm
 
 class Animal:
     ID: int
     ID = 1
 
     __gender: str
+
+    __age: int
+    # Arbitrary params that give rough mortality averaged around 10 years of life
+    lifeExpectancyYears = 10 * 2
+    deviationYears = 3
+    mortalityDistribution = norm(lifeExpectancyYears * 365, deviationYears * 365)
 
     __health: float
     maxHealth = 100.
@@ -32,6 +38,8 @@ class Animal:
         else:
             self.__gender = random.choice(["male", "female"])
 
+        self.__age = 0
+
         self.__health = Animal.maxHealth
         self.__foodLevel = Animal.maxFoodLevel
 
@@ -40,7 +48,7 @@ class Animal:
 
     def report(self) -> None:
         print(f"\nAnimal {self.ID}:")
-        print(f"Alive: {self.alive}")
+        print(f"Age: {self.age}")
         print(f"Health: {self.health}")
         print(f"Hungry: {self.hungry}")
         print(f"Food Level: {self.foodLevel}")
@@ -52,6 +60,23 @@ class Animal:
 
     def sexuallyCompatible(self, potentialMate):
         return potentialMate.gender != self.__gender and self != potentialMate
+
+    # Age methods
+    @property
+    def age(self):
+        return self.__age
+
+    @property
+    def ageInYears(self):
+        return self.__age / 365
+
+    def ageDeath(self):
+        # Probability that the animal will die
+        probabilityDeath = Animal.mortalityDistribution.cdf(self.age)
+
+        if random.random() <= probabilityDeath:
+            self.__health = 0
+            print(f"Killed at age {self.ageInYears}")
 
     # Health Methods
     @property
@@ -127,17 +152,22 @@ class Animal:
     # Every time step:
     def simulateDay(self):
         if self.alive:
+            # Check if it should die naturally
+            self.ageDeath()
+
             self.hunger(Animal.foodLevelExpelledPerDay)
 
             if self.hungry:
                 self.damage(Animal.hungerDamage)
+                pass
 
         if self.alive:
             self.act()
+            self.__age += 1
 
 
 if __name__ == "__main__":
-    numAnimals = 1
+    numAnimals = 2
 
     animals = []
     for _ in range(numAnimals):
