@@ -1,6 +1,7 @@
 import random
 from scipy.stats import norm
 
+
 class Animal:
     ID: int
     ID = 1
@@ -76,7 +77,6 @@ class Animal:
 
         if random.random() <= probabilityDeath:
             self.__health = 0
-            print(f"Killed at age {self.ageInYears}")
 
     # Health Methods
     @property
@@ -124,27 +124,20 @@ class Animal:
         eval("self." + actionFunction + "()")
 
     def seek(self, targetLocation):
-        print(f"Seeking {targetLocation}")
-
         # TODO - Add seek functionality
+        pass
 
     def seekFood(self):
-        print("Seeking Food")
-
         # TODO - Choose nearest food source
         nearestFoodSource = None
         self.seek(nearestFoodSource)
 
     def seekMate(self):
-        print("Seeking Mate")
-
         # TODO - Choose nearest suitable mate
         nearestSuitableMate = None
         self.seek(nearestSuitableMate)
 
     def wander(self):
-        print("Wandering")
-
         # TODO - Choose random position on the play space
         randomLocation = None
         self.seek(randomLocation)

@@ -3,6 +3,9 @@ from unittest import TestCase
 from Simulation import Animal
 
 
+THOROUGHTESTING: bool = False
+
+
 class TestAnimal(TestCase):
     def setUp(self):
         self.animal = Animal()
@@ -27,6 +30,35 @@ class TestInit(TestAnimal):
         femaleAnimal = Animal(male=False)
         self.assertEqual("male", maleAnimal.gender)
         self.assertEqual("female", femaleAnimal.gender)
+
+    def test_initial_age(self):
+        self.assertEqual(0, self.animal.age)
+
+
+class TestAge(TestAnimal):
+    def test_age_increases_with_days(self):
+        age = self.animal.age
+        self.animal.simulateDay()
+        self.assertEqual(age + 1, self.animal.age)
+
+    def test_age_in_years(self):
+        newAnimal = Animal()
+        newAnimal.simulateDay()
+        self.assertEqual(newAnimal.age/365, newAnimal.ageInYears)
+
+    # This is a LONG test (~320ms) - only activated when THOROUGH is True
+    def test_animal_eventually_dies_from_natural_causes(self):
+        self.assertEqual(True, self.animal.alive)
+        if THOROUGHTESTING:
+            # Test over double the years of the animal's life expectancy (by then animal must be dead)
+            for year in range(2 * Animal.lifeExpectancyYears):
+                for day in range(365):
+                    # Age the animal
+                    self.animal.simulateDay()
+                    # Feed the animal so it can't die from hunger
+                    self.animal.eat(Animal.foodLevelExpelledPerDay)
+    
+            self.assertEqual(False, self.animal.alive)
 
 
 class TestGender(TestAnimal):
